@@ -1,7 +1,7 @@
 const { Router } = require("express")
 const { authorize } = require("../middlewares/authorizeMiddleware")
 const { authenticate } = require("../middlewares/authenticateMiddleware")
-const { commentsofPost, getCommentbyId, createComment, updateComment } = require("../controllers/CommentController")
+const { commentsofPost, getCommentbyId, createComment, updateComment, deleteComment } = require("../controllers/CommentController")
 
 const CommentRouter = Router()
 
