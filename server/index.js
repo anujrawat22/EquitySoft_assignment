@@ -7,10 +7,24 @@ const { PostRouter } = require("./routes/PostRoute")
 const { CommentRouter } = require("./routes/CommentRoute")
 const app = express()
 const port = process.env.PORT || 8080
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Blog app Docs',
+            version: '1.0.0',
+        },
+    },
+    apis: ['./routes/*.js'], // files containing annotations as above
+};
+
+const openapiSpecification = swaggerJsdoc(options);
 
 app.use(express.json())
 app.use(cors())
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 app.use("/api/users", UserRouter)
 app.use("/api/posts", PostRouter)
 app.use("/api/comments", CommentRouter)
