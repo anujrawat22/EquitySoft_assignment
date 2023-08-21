@@ -1,11 +1,12 @@
 const { User } = require("../models/UserModel");
+require('dotenv').config()
 const bcrypt = require("bcrypt")
 const saltRounds = 5
 const jwt = require('jsonwebtoken')
 const secretkey = process.env.Secretkey
 
 exports.signup = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
     try {
         const findUser = await User.findOne({ email })
         if (findUser) {
@@ -17,7 +18,7 @@ exports.signup = async (req, res) => {
                 console.log(err);
                 return res.status(400).send({ err: "Something went wrong" })
             }
-            const newUser = new User({ username, email, password: hash })
+            const newUser = new User({ username, email, password: hash, role })
             await newUser.save()
             return res.status(201).send({ msg: "Registration successfull" })
         });
