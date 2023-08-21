@@ -13,6 +13,7 @@ const authenticate = (req, res, next) => {
         if (decoded) {
             req.userId = decoded.userId
             req.role = decoded.role
+            req.username = decoded.username
             next()
         } else {
 
