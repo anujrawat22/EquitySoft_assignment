@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { authenticate } = require('../middlewares/authenticateMiddleware')
 const { authorize } = require('../middlewares/authorizeMiddleware')
-const { allpost, getpostbyid, createpost, updatepost, deletepost } = require('../controllers/PostController')
+const { allpost, getpostbyid, createpost, updatepost, deletepost, userPost } = require('../controllers/PostController')
 /**
  * @swagger
  * tags:
@@ -29,7 +29,7 @@ const PostRouter = Router()
 
 /**
  * @swagger
- * /getPosts:
+ * /api/posts/getPosts:
  *   get:
  *     summary: Get all posts with optional pagination
  *     tags: [Posts]
@@ -57,7 +57,7 @@ PostRouter.get("/getPosts", allpost)
 
 /**
  * @swagger
- * /post/{id}:
+ * /api/posts/post/{id}:
  *   get:
  *     summary: Get a post by ID
  *     tags: [Posts]
@@ -80,7 +80,7 @@ PostRouter.get("/post/:id", getpostbyid)
 
 /**
  * @swagger
- * /create:
+ * /api/posts/create:
  *   post:
  *     summary: Create a new post
  *     tags: [Posts]
@@ -103,7 +103,7 @@ PostRouter.post("/create", authenticate, authorize(['author']), createpost)
 
 /**
  * @swagger
- * /update/{id}:
+ * /api/posts/update/{id}:
  *   put:
  *     summary: Update a post by ID
  *     tags: [Posts]
@@ -134,7 +134,7 @@ PostRouter.put("/update/:id", authenticate, authorize(['author']), updatepost)
 
 /**
  * @swagger
- * /delete/{id}:
+ * /api/posts/delete/{id}:
  *   delete:
  *     summary: Delete a post
  *     tags: [Posts]
@@ -159,5 +159,7 @@ PostRouter.put("/update/:id", authenticate, authorize(['author']), updatepost)
  */
 
 PostRouter.delete("/delete/:id", authenticate, authorize(['author']), deletepost)
+
+PostRouter.get("/userPost", authenticate, authorize(['author']), userPost)
 
 module.exports = { PostRouter }

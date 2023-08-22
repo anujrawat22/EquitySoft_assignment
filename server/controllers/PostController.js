@@ -44,7 +44,7 @@ exports.createpost = async (req, res) => {
     try {
         const newPost = new Post({ title, content, author: userId })
         await newPost.save()
-        res.status(201).send({ msg: "New post created" })
+        res.status(201).send({ msg: "New post created", data: newPost })
     } catch (error) {
         console.log("Error creating the post : ", error);
         res.status(500).send({ err: "Server error" })
@@ -55,7 +55,7 @@ exports.updatepost = async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
     const userId = req.userId
-    
+
     try {
         const post = await Post.findOne({ _id: id, author: userId })
         if (!post) {
@@ -84,6 +84,17 @@ exports.deletepost = async (req, res) => {
         res.status(204).send({ msg: `Post with id - ${id} deleted successfully` })
     } catch (error) {
         console.log(`Error deleting post with id - ${id} :`, error);
+        res.status(500).send({ err: "Server error" })
+    }
+}
+
+exports.userPost = async (req, res) => {
+    const userId = req.userId
+    try {
+        const posts = await Post.find({ author: userId }).sort({ createdAt: -1 })
+        res.status(200).send({ msg: "All posts of data", data: posts })
+    } catch (error) {
+        console.log("Error getting post of the user :", error);
         res.status(500).send({ err: "Server error" })
     }
 }

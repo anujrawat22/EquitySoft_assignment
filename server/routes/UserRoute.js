@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { signup, login } = require("../controllers/UserController")
+const { signup, login, getuserdetails } = require("../controllers/UserController")
 
 const UserRouter = Router()
 
@@ -29,7 +29,7 @@ const UserRouter = Router()
 
 /**
  * @swagger
- * /signup:
+ * api/users/signup:
  *   post:
  *     summary: Register a new user
  *     tags:
@@ -55,7 +55,7 @@ UserRouter.post("/signup", signup)
 
 /**
  * @swagger
- * /login:
+ * api/users/login:
  *   post:
  *     summary: Log in as a user
  *     tags:
@@ -76,5 +76,7 @@ UserRouter.post("/signup", signup)
  *         description: Server error
  */
 UserRouter.post("/login", login)
+
+UserRouter.get("/userdetails/:id",getuserdetails)
 
 module.exports = { UserRouter }

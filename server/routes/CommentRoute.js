@@ -63,7 +63,7 @@ const CommentRouter = Router()
 
 /**
  * @swagger
- * /comments/all/{postId}:
+ * /api/comments/all/{postId}:
  *   get:
  *     summary: Get comments of a post
  *     tags: [Comments]
@@ -89,7 +89,7 @@ CommentRouter.get("/all/:postId", commentsofPost)
 
 /**
  * @swagger
- * /comments/getComment/{id}:
+ * /api/comments/getComment/{id}:
  *   get:
  *     summary: Get a comment by ID
  *     tags: [Comments]
@@ -117,7 +117,7 @@ CommentRouter.get("/getComment/:id", getCommentbyId)
 
 /**
  * @swagger
- * /comments/create:
+ * /api/comments/create:
  *   post:
  *     summary: Create a new comment
  *     tags: [Comments]
@@ -149,7 +149,7 @@ CommentRouter.post("/create", authenticate, createComment)
 
 /**
  * @swagger
- * /comments/edit/{id}:
+ * /api/comments/edit/{id}:
  *   put:
  *     summary: Update a comment by ID
  *     tags: [Comments]
@@ -185,7 +185,7 @@ CommentRouter.put("/edit/:id", authenticate, updateComment)
 
 /**
  * @swagger
- * /comments/delete/{id}:
+ * /api/comments/delete/{id}:
  *   delete:
  *     summary: Delete a comment by ID
  *     tags: [Comments]

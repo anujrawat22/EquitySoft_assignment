@@ -46,9 +46,20 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ userId: user._id, role: user.role, username: user.username }, secretkey, { expiresIn: 60 * 60 * 24 * 7 })
 
         res.cookie('token', token)
-        res.status(200).send({ msg: "Login Successfull" })
+        res.status(200).send({ msg: "Login Successfull", token, role: user.role, user: user.username })
     } catch (error) {
         console.log(error);
+        res.status(500).send({ err: "Server error" })
+    }
+}
+
+exports.getuserdetails = async (req, res) => {
+    const { id } = req.params
+    try {
+        const user = await User.aggregate([{ $match: { _id: id } }, { $project: { username: 1 } }])
+        res.status(200).send({ msg: "user details", data: user })
+    } catch (error) {
+        console.log(error)
         res.status(500).send({ err: "Server error" })
     }
 }
