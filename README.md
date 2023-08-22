@@ -4,3 +4,6 @@
 
 ## Production link is in the description
 
+## App functionality video - https://drive.google.com/file/d/1BasHTlbtvX2xWnJufiaOlQ-TSe4cAE4X/view?usp=sharing
+
+## Database screenshots - https://drive.google.com/drive/folders/1epH_AvySU7GO0Vy6jPtsC_EQx_pbBWrq?usp=sharing
