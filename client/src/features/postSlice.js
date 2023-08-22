@@ -23,7 +23,7 @@ export const fetchAllPosts = createAsyncThunk("/posts/getPosts", async () => {
 })
 
 export const fetchUserPosts = createAsyncThunk('posts/userPost', async (token) => {
-    
+
     const response = await axios.get(`${apiurl}/posts/userPost`, {
         headers: { Authorization: `bearer ${token}` }
     });
@@ -53,6 +53,11 @@ export const deletePost = createAsyncThunk("posts/delete", async (id, { getState
 
 export const fetchPostDetails = createAsyncThunk('posts/fetchPostDetails', async (id) => {
     const response = await axios.get(`${apiurl}/posts/post/${id}`);
+    return response.data.data;
+});
+
+export const searchPosts = createAsyncThunk('/posts/search', async (title) => {
+    const response = await axios.get(`${apiurl}/posts/search?title=${title}`);
     return response.data.data;
 });
 
@@ -97,6 +102,17 @@ const postSlice = createSlice({
             })
             .addCase(fetchPostDetails.fulfilled, (state, action) => {
                 state.selectedPost = action.payload;
+            })
+            .addCase(searchPosts.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(searchPosts.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.posts = action.payload;
+            })
+            .addCase(searchPosts.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             });
 
     },

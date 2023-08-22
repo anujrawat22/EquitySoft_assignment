@@ -160,6 +160,36 @@ PostRouter.put("/update/:id", authenticate, authorize(['author']), updatepost)
 
 PostRouter.delete("/delete/:id", authenticate, authorize(['author']), deletepost)
 
+/**
+ * @swagger
+ * /api/posts/userPost:
+ *   get:
+ *     summary: Get posts of the authenticated user.
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of posts belonging to the authenticated user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   example: All posts of the user
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/PostData'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
+
 PostRouter.get("/userPost", authenticate, authorize(['author']), userPost)
 
 /**
