@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Container, Stack, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { Button, Container, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import axios from 'axios';
@@ -13,20 +13,24 @@ const Signup = () => {
   const MySwal = withReactContent(Swal)
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm()
-
+  const [role, setRole] = useState('reader')
   const signupform = (data) => {
     axios.post(`${apiurl}/users/signup`, {
-      ...data
+      ...data,role
     }).then(res => {
-     MySwal.fire(
-      'Singup Successfull',
-  '',
-  'success'
-     )
+      MySwal.fire(
+        'Singup Successfull',
+        '',
+        'success'
+      )
       navigate("/login")
     }
     )
       .catch(err => console.log(err.response.data.msg))
+  }
+
+  const handleChange = (e) => {
+    setRole(e.target.value)
   }
 
   return (
@@ -48,6 +52,17 @@ const Signup = () => {
               }
             })} />
             <Typography variant='caption' color={"red"}>{errors.password?.message}</Typography>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={role}
+              label="Age"
+              onChange={handleChange}
+            >
+              <MenuItem value={'reader'}>Reader</MenuItem>
+              <MenuItem value={'author'}>Author</MenuItem>
+
+            </Select>
             <Button variant='outlined' type='submit'>Signup</Button>
             <Typography variant='subtitle2' textAlign={"center"}>Already a user ? <Link to={'/login'}>Login</Link></Typography>
           </Stack>

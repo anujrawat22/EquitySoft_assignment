@@ -21,16 +21,16 @@ const Login = () => {
             ...data
         }).then(res => {
             MySwal.fire(
-                'Login Successfull','',
-            'success'
-               )
+                'Login Successfull', '',
+                'success'
+            )
             dispatch(loginSuccess(res.data))
-            if(res.data.role === 'reader'){
+            if (res.data.role === 'reader') {
                 navigate("/allposts")
-            }else if(res.data.role === 'author'){
+            } else if (res.data.role === 'author') {
                 navigate("/addpost")
             }
-            
+
         })
             .catch(err => {
                 dispatch(loginFailure(err.response.data.msg))
