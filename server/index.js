@@ -14,10 +14,15 @@ const options = {
         openapi: '3.0.0',
         info: {
             title: 'Blog app Docs',
-            version: '1.0.0',
+            version: '1.0.2',
         },
+        servers: [
+            {
+              url: 'https://blog-app-2gw0.onrender.com/', // Your base URL
+            },
+          ],
     },
-    apis: ['./routes/*.js'], // files containing annotations as above
+    apis: ['./routes/*.js'] // files containing annotations as above
 };
 
 const openapiSpecification = swaggerJsdoc(options);
