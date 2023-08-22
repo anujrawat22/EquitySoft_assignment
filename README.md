@@ -2,7 +2,7 @@
 
 ## Backend Docs - https://blog-app-2gw0.onrender.com/api-docs/
 
-## Production link is in the description
+## Production link - https://blogapp-hazel-five.vercel.app/
 
 ## App functionality video - https://drive.google.com/file/d/1BasHTlbtvX2xWnJufiaOlQ-TSe4cAE4X/view?usp=sharing
 
