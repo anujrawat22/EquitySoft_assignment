@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { authenticate } = require('../middlewares/authenticateMiddleware')
 const { authorize } = require('../middlewares/authorizeMiddleware')
-const { allpost, getpostbyid, createpost, updatepost, deletepost, userPost } = require('../controllers/PostController')
+const { allpost, getpostbyid, createpost, updatepost, deletepost, userPost, searchPost } = require('../controllers/PostController')
 /**
  * @swagger
  * tags:
@@ -161,5 +161,54 @@ PostRouter.put("/update/:id", authenticate, authorize(['author']), updatepost)
 PostRouter.delete("/delete/:id", authenticate, authorize(['author']), deletepost)
 
 PostRouter.get("/userPost", authenticate, authorize(['author']), userPost)
+
+/**
+ * @swagger
+ * /api/posts/search:
+ *   get:
+ *     summary: Search for posts by title
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         required: true
+ *         description: The search query for the title
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with matching posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/PostData'
+ *       404:
+ *         description: Invalid or missing query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 err:
+ *                   type: string
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 err:
+ *                   type: string
+ */
+
+PostRouter.get("/search", searchPost)
 
 module.exports = { PostRouter }

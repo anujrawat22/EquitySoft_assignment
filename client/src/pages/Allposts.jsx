@@ -30,7 +30,7 @@ const Allposts = () => {
   }, [dispatch])
 
   return (
-    <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "flex", flexWrap: 'wrap', justifyContent: "space-around" }}>
+    <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "flex", flexWrap: 'wrap', justifyContent: "space-around",rowGap :'30px' }}>
       {
         posts.length > 0 ? posts.map((el) => {
           return <UserPostCard key={el._id} {...el} />

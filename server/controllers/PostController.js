@@ -98,3 +98,17 @@ exports.userPost = async (req, res) => {
         res.status(500).send({ err: "Server error" })
     }
 }
+
+exports.searchPost = async (req, res) => {
+    const { title } = req.query
+    try {
+        if(!title || title==" "){
+            return res.status(404).send({err : "the query must be valid"})
+        }
+        const posts = await Post.find({title : { "$regex": title, $options: 'i' } })
+        res.status(200).send({ msg: "Posts response according to query", data: posts })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: "Server error" })
+    }
+}
