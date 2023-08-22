@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllPosts, searchPosts } from '../features/postSlice';
-import { TextField, Typography } from '@mui/material';
+import { Pagination, Stack, TextField, Typography } from '@mui/material';
 import UserPostCard from '../Components/UserPostCard';
 
 
@@ -30,7 +30,7 @@ const Allposts = () => {
 
   useEffect(() => {
     checktoken()
-    if (token ) {
+    if (token) {
       dispatch(fetchAllPosts())
     }
   }, [dispatch])
@@ -50,6 +50,9 @@ const Allposts = () => {
           <Typography variant='h5'>No Posts to Show</Typography>
       }
     </div>
+    <Stack spacing={2}>
+      <Pagination count={10} />
+    </Stack>
   </>
   )
 }
