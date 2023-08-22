@@ -7,7 +7,7 @@ const initialState = {
     comments: [],
 
 }
-const apiurl = `http://localhost:8080/api`
+const apiurl = `https://blog-app-2gw0.onrender.com/api`
 
 export const fetchCommentForPost = createAsyncThunk("/comments/all",
     async (postId) => {
@@ -31,7 +31,7 @@ export const addComment = createAsyncThunk(
 export const deleteComment = createAsyncThunk(
     'comments/deleteComment',
     async (commentId) => {
-        await axios.delete(`http://localhost:8080/api/comments/delete/${commentId}`);
+        await axios.delete(`https://blog-app-2gw0.onrender.com/api/comments/delete/${commentId}`);
         return commentId;
     }
 );

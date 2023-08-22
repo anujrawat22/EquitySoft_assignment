@@ -4,7 +4,7 @@ import { selectToken } from './authSlice';
 
 
 
-const apiurl = `http://localhost:8080/api`
+const apiurl = `https://blog-app-2gw0.onrender.com/api`
 
 const initialState = {
     posts: [],
