@@ -8,7 +8,7 @@ import { loginFailure, loginSuccess } from '../features/authSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
-const apiurl = `https://blog-app-2gw0.onrender.com/api`
+const apiurl = process.env.REACT_APP_API_URL
 const Login = () => {
     const MySwal = withReactContent(Swal)
     const navigate = useNavigate()
