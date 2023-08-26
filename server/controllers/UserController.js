@@ -40,8 +40,9 @@ exports.login = async (req, res) => {
 
         const verify = bcrypt.compareSync(password, user.password);
 
+
         if (!verify) {
-            return res.status(401).send({ msg: "Invalid Credentials" })
+            return res.status(401).send({ err: "Invalid Credentials" })
         }
         const token = jwt.sign({ userId: user._id, role: user.role, username: user.username }, secretkey, { expiresIn: 60 * 60 * 24 * 7 })
 
