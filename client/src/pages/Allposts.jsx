@@ -40,7 +40,7 @@ const Allposts = () => {
 
       <TextField id="standard-basic" label="Search" variant="standard" onChange={handleChange} value={title} />
     </div>
-    <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "flex", flexWrap: 'wrap', justifyContent: "space-around", rowGap: '30px' }}>
+    <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "grid", gridTemplateColumns: "repeat(3,1fr)", gridTemplateRows: "repeat auto", justifyContent: "space-around", rowGap: '30px' }}>
 
       {
         posts.length > 0 ? posts.map((el) => {

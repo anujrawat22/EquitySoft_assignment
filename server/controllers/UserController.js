@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
     try {
         const findUser = await User.findOne({ email })
         if (findUser) {
-            return res.status(401).send({ msg: "User already exists , please login" })
+            return res.status(401).send({ err: "User already exists , please login" })
         }
 
         bcrypt.hash(password, saltRounds, async function (err, hash) {

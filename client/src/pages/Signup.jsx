@@ -2,30 +2,24 @@ import React, { useState } from 'react'
 import { Button, Container, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import axios from 'axios';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 
-const apiurl = process.env.REACT_APP_API_URL
+import { useDispatch } from 'react-redux';
+import { signupUser } from '../features/authSlice';
+
+
 
 const Signup = () => {
-  const MySwal = withReactContent(Swal)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [role, setRole] = useState('reader')
+
+  const navigateCallback = () => {
+    navigate("/login")
+  }
+
   const signupform = (data) => {
-    axios.post(`${apiurl}/users/signup`, {
-      ...data,role
-    }).then(res => {
-      MySwal.fire(
-        'Singup Successfull',
-        '',
-        'success'
-      )
-      navigate("/login")
-    }
-    )
-      .catch(err => console.log(err.response.data.msg))
+    dispatch(signupUser({ data: { ...data, role }, extra: navigateCallback }))
   }
 
   const handleChange = (e) => {
@@ -55,7 +49,7 @@ const Signup = () => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={role}
-              label="Age"
+              label="role"
               onChange={handleChange}
             >
               <MenuItem value={'reader'}>Reader</MenuItem>
@@ -63,7 +57,7 @@ const Signup = () => {
 
             </Select>
             <Button variant='outlined' type='submit'>Signup</Button>
-            <Typography variant='subtitle2' textAlign={"center"}>Already a user ? <Link to={'/login'}>Login</Link></Typography>
+            <Typography variant='subtitle2' textAlign={"center"}>Already a user ? <Link to={'/login'} style={{ color: "#1976d2" }}>Login</Link></Typography>
           </Stack>
         </form>
       </Container>

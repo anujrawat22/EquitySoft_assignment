@@ -8,6 +8,7 @@ import Allposts from '../pages/Allposts';
 import AddPost from '../pages/AddPost';
 import ManagePost from '../pages/ManagePost';
 import Home from '../pages/Home';
+import PrivateRoute from '../Components/PrivateRoute';
 
 
 
@@ -15,13 +16,16 @@ import Home from '../pages/Home';
 const AllRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Home/>} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/viewpost/:postId" element={<Post />} />
+            <Route element={<PrivateRoute />}>
+                <Route path='/addpost' element={<AddPost />} />
+                <Route path='/manage' element={<ManagePost />} />
+            </Route>
             <Route path="/allposts" element={<Allposts />} />
-            <Route path='/addpost' element={<AddPost />} />
-            <Route path='/manage' element={<ManagePost />} />
+
         </Routes>
     )
 }

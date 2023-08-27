@@ -17,22 +17,17 @@ const AddPost = () => {
   const dispatch = useDispatch()
   const { register, handleSubmit, formState: { errors } } = useForm()
 
-  const checktoken = () => {
-    if (!token && role !== "author") {
-      navigate("/login")
-    }
-  }
 
-  useEffect(() => {
-    checktoken()
-  }, [])
 
   const AddPost = (data) => {
     dispatch(createNewPost(data, token))
-    MySwal.fire(
-      'Blog Posted sucessfully','',
-  'success'
-     )
+    MySwal.fire({
+      icon: 'success',
+      text: "Blog post added",
+      showConfirmButton: false,
+      timer: 1000
+    }
+    )
     navigate('/manage')
   }
 

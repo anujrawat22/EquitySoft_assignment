@@ -41,26 +41,39 @@ export const loginUser = createAsyncThunk("/users/login", async ({ data, extra: 
     }
 })
 
+export const signupUser = createAsyncThunk("/users/signup", async (
+    { data, extra: navigateCallback }
+) => {
+    try {
+        const response = await axios.post(`${apiurl}/users/signup`, {
+            ...data
+        })
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Signup Successful',
+            text: 'You have been Singed up!',
+            showConfirmButton: false,
+            timer: 1000
+        });
+        navigateCallback()
+        return response.data
+    } catch (error) {
+       
+        Swal.fire({
+            icon: 'error',
+            text: error.response.data.err,
+            showConfirmButton: false,
+            timer: 1000
+        });
+        throw error.response.data.err; 
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        loginSuccess: (state, action) => {
-            state.user = action.payload.user;
-            state.token = action.payload.token;
-            state.isAuthenticated = true;
-            state.loading = false;
-            state.error = null;
-            state.role = action.payload.role;
-        },
-        loginFailure: (state, action) => {
-            state.user = null;
-            state.token = null;
-            state.isAuthenticated = false;
-            state.loading = false;
-            state.error = action.payload;
-            state.role = null;
-        },
         logout: state => {
             state.user = null;
             state.token = null;

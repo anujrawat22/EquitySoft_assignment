@@ -48,7 +48,7 @@ const Login = () => {
 
                             <TextField id="outlined-basic" label="Password" variant="outlined" size="small" type='password' {...register('password', { required: "Required field *" })} />
                             <Button variant='outlined' type='submit'>LOGIN</Button>
-                            <Typography variant='subtitle2' textAlign={"center"}>New User ? <Link to={'/signup'}>Signup</Link></Typography>
+                            <Typography variant='subtitle2' textAlign={"center"}>New User ? <Link to={'/signup'}style={{color : "#1976d2"}}>Signup</Link></Typography>
                         </Stack>
                     </form>
                 </Container>
