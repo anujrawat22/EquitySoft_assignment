@@ -1,9 +1,13 @@
-import { Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React from 'react'
 
-const Comment = ({text}) => {
+const Comment = ({ text, author }) => {
   return (
-    <Typography variant='subtitle2'>{text}</Typography>
+    <Stack direction="row">
+      <Typography variant='subtitle2'>
+        {author.username}<span style={{color : "gray",marginLeft : "10px"}}>{text}</span>
+      </Typography>
+    </Stack>
   )
 }
 

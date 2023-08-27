@@ -42,9 +42,7 @@ const Post = () => {
     <div style={{ width: '50dvw', margin: "auto", marginTop: '5dvh', boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",padding : "2dvh"}}>
       <Container maxWidth="m">
         <Stack direction="column" spacing={4}>
-          <Typography variant="h4">Title</Typography>
           <Typography variant="h5">{selectedPost.title}</Typography>
-          <Typography variant="h4">Content</Typography>
           <Typography>{selectedPost.content}</Typography>
           <Typography variant="h6">Comments</Typography>
           <Stack direction="column" spacing={2}>
