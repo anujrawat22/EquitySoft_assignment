@@ -1,45 +1,88 @@
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../features/authSlice';
+
 
 const Navbar = () => {
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { role, user } = useSelector(state => state.auth);
+    const settings = [user, 'Logout'];
+
+    const handleLogout = () => {
+        dispatch(logout())
+        navigate('/login')
+    }
+
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const userRole = useSelector(state => state.auth.role);
 
     const renderNavbar = () => {
         if (isAuthenticated) {
-            if (userRole === 'reader') {
-                return (
-                    <Box sx={{ flexGrow: 1 }}>
-                        <AppBar position="static">
-                            <Toolbar>
-                                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                    Blog App
-                                </Typography>
-                                <Button color="inherit"><Link to="/allposts">All Posts</Link></Button>
-                                <LogoutButton />
-                            </Toolbar>
-                        </AppBar>
-                    </Box>
-                );
-            } else if (userRole === 'author') {
-                return (
-                    <Box sx={{ flexGrow: 1 }}>
-                        <AppBar position="static">
+            return (
+                <Box sx={{ flexGrow: 1 }}>
+                    <AppBar position="static">
                         <Toolbar>
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                 Blog App
                             </Typography>
-                            <Button color="inherit"><Link to="/addpost">Add New Post</Link></Button>
-                            <Button color="inherit"><Link to="/manage">Manage Posts</Link></Button>
-                            <LogoutButton />
-                            </Toolbar>
-                        </AppBar>
-                    </Box>
-                );
-            }
+
+                            <Button color="inherit"><Link to="/allposts">All Posts</Link></Button>
+                            {role === 'author' ?
+                                <>
+                                    <Button color="inherit"><Link to="/addpost">Add Posts</Link></Button>
+                                    <Button color="inherit"><Link to="/manage">Manage Posts</Link></Button>
+                                </>
+                                : null
+                            }
+                            <Box sx={{ flexGrow: 0 }}>
+                                <Tooltip title="Open settings">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar alt="Profile" src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    {settings.map((setting) => (
+                                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                            {setting === 'Logout' ? <Typography textAlign="center" onClick={handleLogout}>{setting}</Typography> :
+                                                <Typography textAlign="center">{setting}</Typography>}
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Box>
+
+                        </Toolbar>
+                    </AppBar>
+                </Box>
+            );
+
         } else {
             return (
                 <Box sx={{ flexGrow: 1 }}>

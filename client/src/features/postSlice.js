@@ -16,26 +16,34 @@ const initialState = {
 
 
 
-export const fetchAllPosts = createAsyncThunk("/posts/getPosts", async () => {
-    const response = await axios.get(`${apiurl}/posts/getPosts`)
+export const fetchAllPosts = createAsyncThunk("/posts/getPosts", async (page) => {
+    const response = await axios.get(`${apiurl}/posts/getPosts?page=${page}`)
     console.log(response.data.data)
     return response.data.data
 })
 
 export const fetchUserPosts = createAsyncThunk('posts/userPost', async (token) => {
-
-    const response = await axios.get(`${apiurl}/posts/userPost`, {
-        headers: { Authorization: `bearer ${token}` }
-    });
-    return response.data.data;
+    try {
+        const response = await axios.get(`${apiurl}/posts/userPost`, {
+            headers: { Authorization: `bearer ${token}` }
+        });
+        console.log(response.data.data)
+        return response.data.data;
+    } catch (error) {
+        throw error.response.data.err
+    }
 });
 
 export const createNewPost = createAsyncThunk(`posts/create`, async (post, { getState }) => {
     const token = selectToken(getState());
-    console.log(post, token)
-    const response = await axios.post(`${apiurl}/posts/create`, post, { headers: { Authorization: `bearer ${token}` } });
-    console.log(response.data.data)
-    return response.data.data;
+    console.log(post)
+    try {
+        const response = await axios.post(`${apiurl}/posts/create`, post, { headers: { Authorization: `bearer ${token}` } });
+        // console.log(response.data.data)
+        return response.data.data;
+    } catch (error) {
+        throw error.response.data.err
+    }
 });
 
 export const deletePost = createAsyncThunk("posts/delete", async (id, { getState }) => {
@@ -94,8 +102,17 @@ const postSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(createNewPost.pending, (state, action) => {
+                state.status = 'pending'
+            })
             .addCase(createNewPost.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.status = 'idle'
                 state.posts.push(action.payload);
+            })
+            .addCase(createNewPost.rejected, (state, action) => {
+                state.status = 'failed'
+                state.status = action.error.message;
             })
             .addCase(deletePost.fulfilled, (state, action) => {
                 state.posts = state.posts.filter((post) => post._id !== action.payload);

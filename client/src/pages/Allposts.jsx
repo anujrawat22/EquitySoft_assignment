@@ -7,11 +7,15 @@ import UserPostCard from '../Components/UserPostCard';
 
 
 
+
 const Allposts = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { token } = useSelector(state => state.auth);
   const [title, setTitle] = useState('')
+
+  const [currentPage, setCurrentPage] = useState(1)
+
   const posts = useSelector(state => state.posts.posts)
   console.log(posts)
 
@@ -23,15 +27,13 @@ const Allposts = () => {
 
   const handleChange = (e) => {
     setTitle(e.target.value)
-    setTimeout(() => {
-      dispatch(searchPosts(title))
-    }, 1000)
+    dispatch(searchPosts(title))
   }
 
   useEffect(() => {
     checktoken()
     if (token) {
-      dispatch(fetchAllPosts())
+      dispatch(fetchAllPosts(currentPage))
     }
   }, [dispatch])
 
@@ -50,9 +52,15 @@ const Allposts = () => {
           <Typography variant='h5'>No Posts to Show</Typography>
       }
     </div>
-    <Stack spacing={2}>
-      <Pagination count={10} />
-    </Stack>
+    <div style={{ margin: 'auto', display: 'flex', justifyContent: "center", padding: '5%' }} >
+      <Stack spacing={2}>
+        <Pagination count={10} color="primary" defaultPage={currentPage} onChange={(e, value) => {
+          setCurrentPage(value)
+          dispatch(fetchAllPosts(value))
+        }
+        } />
+      </Stack>
+    </div>
   </>
   )
 }
