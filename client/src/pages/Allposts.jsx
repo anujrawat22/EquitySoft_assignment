@@ -17,7 +17,6 @@ const Allposts = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const posts = useSelector(state => state.posts.posts)
-  console.log(posts)
 
   const checktoken = () => {
     if (!token) {
@@ -27,7 +26,7 @@ const Allposts = () => {
 
   const handleChange = (e) => {
     setTitle(e.target.value)
-    dispatch(searchPosts(title))
+    dispatch(searchPosts(e.target.value))
   }
 
   useEffect(() => {
@@ -54,11 +53,12 @@ const Allposts = () => {
     </div>
     <div style={{ margin: 'auto', display: 'flex', justifyContent: "center", padding: '5%' }} >
       <Stack spacing={2}>
-        <Pagination count={10} color="primary" defaultPage={currentPage} onChange={(e, value) => {
-          setCurrentPage(value)
-          dispatch(fetchAllPosts(value))
-        }
-        } />
+        <Pagination count={10} color="primary" defaultPage={currentPage}
+          onChange={(e, value) => {
+            setCurrentPage(value)
+            dispatch(fetchAllPosts(value))
+          }
+          } />
       </Stack>
     </div>
   </>

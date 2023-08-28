@@ -66,6 +66,7 @@ export const fetchPostDetails = createAsyncThunk('posts/fetchPostDetails', async
 
 export const searchPosts = createAsyncThunk('/posts/search', async (title) => {
     const response = await axios.get(`${apiurl}/posts/search?title=${title}`);
+    console.log(response.data.data)
     return response.data.data;
 });
 
