@@ -1,8 +1,9 @@
 const { Router } = require("express")
-const { signup, login, getuserdetails } = require("../controllers/UserController")
+const { signup, login, getuserdetails, logout } = require("../controllers/UserController")
+const cookieParser = require('cookie-parser');
 
 const UserRouter = Router()
-
+UserRouter.use(cookieParser())
 /**
  * @swagger
  * components:
@@ -77,6 +78,8 @@ UserRouter.post("/signup", signup)
  */
 UserRouter.post("/login", login)
 
-UserRouter.get("/userdetails/:id",getuserdetails)
+UserRouter.get("/logout", logout)
+
+UserRouter.get("/userdetails/:id", getuserdetails)
 
 module.exports = { UserRouter }

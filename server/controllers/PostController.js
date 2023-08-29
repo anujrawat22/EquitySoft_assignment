@@ -1,16 +1,19 @@
-const { default: mongoose } = require("mongoose");
+
 const { Post } = require("../models/PostModel");
+const { User } = require("../models/UserModel");
 
 exports.allpost = async (req, res) => {
-    let { page, limit } = req.body;
-    try {
-        let posts;
-        if (page && limit) {
-            posts = await Post.find({}).skip((page - 1) * limit).limit(limit)
-        } else {
 
+    let page = parseInt(req.query.page)
+    try {
+        let order = parseInt(req.query.order) || -1
+
+        let posts;
+        if (page) {
+            posts = await Post.find({}).sort({ createdAt: order }).populate('author', 'username').skip((page - 1) * 15).limit(15)
+        } else {
             page = 1
-            posts = await Post.find({}).skip((page - 1) * 10).limit(10)
+            posts = await Post.find({}).sort({ createdAt: order }).populate('author', 'username').skip((page - 1) * 15).limit(15)
 
         }
 
@@ -26,7 +29,7 @@ exports.allpost = async (req, res) => {
 exports.getpostbyid = async (req, res) => {
     const { id } = req.params;
     try {
-        const post = await Post.findById(id)
+        const post = await Post.findById(id).populate('author', 'username')
         if (!post) {
             return res.status(404).send({ err: `Posts with id -${id} not found` })
         }
@@ -44,6 +47,7 @@ exports.createpost = async (req, res) => {
     try {
         const newPost = new Post({ title, content, author: userId })
         await newPost.save()
+        await newPost.populate('author', 'username')
         res.status(201).send({ msg: "New post created", data: newPost })
     } catch (error) {
         console.log("Error creating the post : ", error);
@@ -91,7 +95,7 @@ exports.deletepost = async (req, res) => {
 exports.userPost = async (req, res) => {
     const userId = req.userId
     try {
-        const posts = await Post.find({ author: userId }).sort({ createdAt: -1 })
+        const posts = await Post.find({ author: userId }).populate('author', 'username').sort({ createdAt: -1 })
         res.status(200).send({ msg: "All posts of data", data: posts })
     } catch (error) {
         console.log("Error getting post of the user :", error);
@@ -100,12 +104,25 @@ exports.userPost = async (req, res) => {
 }
 
 exports.searchPost = async (req, res) => {
-    const { title } = req.query
+    const { title, author, page, order } = req.query
     try {
-        if(!title || title==" "){
-            return res.status(404).send({err : "the query must be valid"})
+        let currentPage = parseInt(page) || 1
+        let sortOrder = parseInt(order) || -1
+        let posts;
+        if (!title && !author) {
+            posts = await Post.find({}).populate('author', 'username').skip((currentPage - 1) * 15).limit(15)
+        } else {
+
+            if (title) {
+                posts = await Post.find({ title: { "$regex": title, $options: 'i' } }).sort({ createdAt: sortOrder }).populate('author', 'username').skip((currentPage - 1) * 15).limit(15)
+            } else if (author) {
+                posts = await Post.find({
+                    author: {
+                        $in: await User.find({ username: { $regex: author, $options: 'i' } }).distinct('_id'),
+                    },
+                }).sort({ createdAt: sortOrder }).populate('author', 'username').skip((currentPage - 1) * 15).limit(15);
+            }
         }
-        const posts = await Post.find({title : { "$regex": title, $options: 'i' } })
         res.status(200).send({ msg: "Posts response according to query", data: posts })
     } catch (error) {
         console.log(error);

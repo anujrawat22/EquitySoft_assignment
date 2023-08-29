@@ -5,6 +5,7 @@ const saltRounds = 5
 const jwt = require('jsonwebtoken')
 const secretkey = process.env.Secretkey
 
+
 exports.signup = async (req, res) => {
     const { username, email, password, role } = req.body;
     try {
@@ -46,7 +47,10 @@ exports.login = async (req, res) => {
         }
         const token = jwt.sign({ userId: user._id, role: user.role, username: user.username }, secretkey, { expiresIn: 60 * 60 * 24 * 7 })
 
-        res.cookie('token', token)
+        res.cookie('token', token, {
+            maxAge: 3600 * 1000 * 24 * 7,
+            httpOnly: true,
+        })
         res.status(200).send({ msg: "Login Successfull", token, role: user.role, user: user.username })
     } catch (error) {
         console.log(error);
@@ -63,4 +67,9 @@ exports.getuserdetails = async (req, res) => {
         console.log(error)
         res.status(500).send({ err: "Server error" })
     }
+}
+
+exports.logout = (req, res) => {
+    res.clearCookie('token')
+    res.status(204).send({ msg: "User logged out" })
 }
