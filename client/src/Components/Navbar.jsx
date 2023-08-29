@@ -2,7 +2,8 @@ import { AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Toolt
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../features/authSlice';
+import { Logout } from '../features/authSlice';
+
 
 
 const Navbar = () => {
@@ -13,7 +14,7 @@ const Navbar = () => {
     const settings = [user, 'Logout'];
 
     const handleLogout = () => {
-        dispatch(logout())
+        dispatch(Logout())
         navigate('/login')
     }
 

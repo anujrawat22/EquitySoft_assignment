@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginUser } from '../features/authSlice'
-import Swal from 'sweetalert2'
+
 
 
 const Login = () => {
@@ -33,22 +33,26 @@ const Login = () => {
                 </Typography>;
                 <Container maxWidth="xs" >
                     <form onSubmit={handleSubmit((data) => {
-                        console.log(data)
                         loginform(data)
                     })}>
                         <Stack spacing={2}>
                             <Typography variant='caption' color={"red"}>{errors.email?.message}</Typography>
 
 
-                            <TextField id="outlined-basic" label="Email" variant="outlined" size="small" {...register('email', { required: "Required field *" })} />
+                            <TextField id="outlined-basic" label="Email" variant="outlined" size="small" {...register('email', {
+                                required: "Required field *", pattern: {
+                                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+                                    message: 'Please enter correct email',
+                                },
+                            })} />
 
-                            
+
                             <Typography variant='caption' color={"red"}>{errors.password?.message}</Typography>
 
 
                             <TextField id="outlined-basic" label="Password" variant="outlined" size="small" type='password' {...register('password', { required: "Required field *" })} />
                             <Button variant='outlined' type='submit'>LOGIN</Button>
-                            <Typography variant='subtitle2' textAlign={"center"}>New User ? <Link to={'/signup'}style={{color : "#1976d2"}}>Signup</Link></Typography>
+                            <Typography variant='subtitle2' textAlign={"center"}>New User ? <Link to={'/signup'} style={{ color: "#1976d2" }}>Signup</Link></Typography>
                         </Stack>
                     </form>
                 </Container>

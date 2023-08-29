@@ -16,9 +16,8 @@ const initialState = {
 
 
 
-export const fetchAllPosts = createAsyncThunk("/posts/getPosts", async (page) => {
-    const response = await axios.get(`${apiurl}/posts/getPosts?page=${page}`)
-    console.log(response.data.data)
+export const fetchAllPosts = createAsyncThunk("/posts/getPosts", async ({ page, order }) => {
+    const response = await axios.get(`${apiurl}/posts/getPosts?page=${page}&order=${order}`)
     return response.data.data
 })
 
@@ -27,7 +26,6 @@ export const fetchUserPosts = createAsyncThunk('posts/userPost', async (token) =
         const response = await axios.get(`${apiurl}/posts/userPost`, {
             headers: { Authorization: `bearer ${token}` }
         });
-        console.log(response.data.data)
         return response.data.data;
     } catch (error) {
         throw error.response.data.err
@@ -39,7 +37,6 @@ export const createNewPost = createAsyncThunk(`posts/create`, async (post, { get
     console.log(post)
     try {
         const response = await axios.post(`${apiurl}/posts/create`, post, { headers: { Authorization: `bearer ${token}` } });
-        // console.log(response.data.data)
         return response.data.data;
     } catch (error) {
         throw error.response.data.err
@@ -64,9 +61,13 @@ export const fetchPostDetails = createAsyncThunk('posts/fetchPostDetails', async
     return response.data.data;
 });
 
-export const searchPosts = createAsyncThunk('/posts/search', async (title) => {
-    const response = await axios.get(`${apiurl}/posts/search?title=${title}`);
-    console.log(response.data.data)
+export const searchPosts = createAsyncThunk('/posts/search', async ({ title, author, page, order }) => {
+    let response
+    if (title) {
+        response = await axios.get(`${apiurl}/posts/search?title=${title}&page=${page}&order=${order}`);
+    } else if (author) {
+        response = await axios.get(`${apiurl}/posts/search?author=${author}&page=${page}&order=${order}`);
+    }
     return response.data.data;
 });
 

@@ -1,13 +1,15 @@
 
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 
 const apiurl = process.env.REACT_APP_API_URL
 
 const initialState = {
     user: null,
-    token: null,
+    token: Cookies.get('token') || null,
     isAuthenticated: false,
     loading: false,
     error: null,
@@ -28,6 +30,7 @@ export const loginUser = createAsyncThunk("/users/login", async ({ data, extra: 
             timer: 1000
         });
         navigateCallback(response.data)
+        Cookies.set('token', response.data.token)
         return response.data
 
     } catch (error) {
@@ -59,14 +62,24 @@ export const signupUser = createAsyncThunk("/users/signup", async (
         navigateCallback()
         return response.data
     } catch (error) {
-       
+
         Swal.fire({
             icon: 'error',
             text: error.response.data.err,
             showConfirmButton: false,
             timer: 1000
         });
-        throw error.response.data.err; 
+        throw error.response.data.err;
+    }
+})
+
+export const Logout = createAsyncThunk("users/logout", async (_, { dispatch }) => {
+    try {
+        await axios.get(`${apiurl}/users/logout`);
+        Cookies.remove('token')
+        dispatch(authSlice.actions.logout())
+    } catch (error) {
+        console.error('Error clearing cookies:', error);
     }
 })
 

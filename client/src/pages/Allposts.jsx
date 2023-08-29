@@ -9,37 +9,57 @@ import UserPostCard from '../Components/UserPostCard';
 
 
 const Allposts = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { token } = useSelector(state => state.auth);
   const [title, setTitle] = useState('')
-
+  const [author, setAuthor] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-
+  const [order, setOrder] = useState(0)
   const posts = useSelector(state => state.posts.posts)
 
-  const checktoken = () => {
-    if (!token) {
-      navigate("/login")
-    }
+  
+
+  const handletitlesearch = (e) => {
+    setTitle(e.target.value)
+    setCurrentPage(1)
+    dispatch(searchPosts({ title: e.target.value, page: currentPage }))
   }
 
-  const handleChange = (e) => {
-    setTitle(e.target.value)
-    dispatch(searchPosts(e.target.value))
+  const handleauthorsearch = (e) => {
+    setAuthor(e.target.value)
+    setCurrentPage(1)
+    dispatch(searchPosts({ author: e.target.value, page: currentPage }))
   }
 
   useEffect(() => {
-    checktoken()
-    if (token) {
-      dispatch(fetchAllPosts(currentPage))
-    }
+    dispatch(fetchAllPosts({ page: currentPage, order }))
   }, [dispatch])
 
   return (<>
     <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "flex", flexWrap: 'wrap', justifyContent: "center" }}>
-
-      <TextField id="standard-basic" label="Search" variant="standard" onChange={handleChange} value={title} />
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}>
+        <TextField label="Title" variant="standard" onChange={handletitlesearch} value={title} />
+        <TextField label="Author" variant="standard" onChange={handleauthorsearch} value={author} />
+        <TextField
+          id="standard-select-currency-native"
+          select
+          label="Sort"
+          defaultValue=""
+          variant="standard"
+          SelectProps={{
+            native: true,
+          }}
+          helperText="Please posts by date"
+          onChange={(e) => {
+            setOrder(e.target.value)
+            setCurrentPage(1)
+            dispatch(fetchAllPosts({ page: currentPage, order: e.target.value }))
+          }}
+        >
+          <option value={0}></option>
+          <option value={1}>ASC</option>
+          <option value={-1}>DESC</option>
+        </TextField>
+      </div>
     </div>
     <div style={{ width: "80dvw", margin: 'auto', marginTop: '5dvh', height: 'auto', display: "grid", gridTemplateColumns: "repeat(3,1fr)", gridTemplateRows: "repeat auto", justifyContent: "space-around", rowGap: '30px' }}>
 
